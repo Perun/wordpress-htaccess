@@ -1,0 +1,47 @@
+# Necessary after changing the website from http to https
+RewriteEngine On
+RewriteCond %{HTTPS} !=on
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# BEGIN WordPress - Created automatically by WP
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.php [L]
+</IfModule>
+# END WordPress
+
+# Protects wpconfig.php from external access
+<files wp-config.php>
+Order deny,allow
+deny from all
+</files>
+
+# Protects xmlrpc.php from external access
+# Insert this code only if you don't need to use trackbacks and if you don't use external tools.
+<files xmlrpc.php>
+Order deny,allow
+deny from all
+</files>
+
+# Activate mod_deflate to compress or zip the text formats listed below
+# Improves performance
+<FilesMatch "\\.(js|css|html|htm|php|xml|svg)$">
+SetOutputFilter DEFLATE
+</FilesMatch>
+
+# The improvement of browser caching
+# Improves performance
+<FilesMatch "\.(ico|jpg|jpeg|png|gif|js|css|swf)$">
+ExpiresActive on
+ExpiresDefault "access plus 35 days"
+Header unset ETag
+FileETag None
+</FilesMatch>
+
+# If you have memory problems, you can insert this line.
+# If required, you can increase this value to 256mb, for example. 
+php_value memory_limit 128M
